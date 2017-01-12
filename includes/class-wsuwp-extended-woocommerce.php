@@ -27,5 +27,21 @@ class WSUWP_Extended_WooCommerce {
 	 *
 	 * @since 0.0.1
 	 */
-	public function setup_hooks() {}
+	public function setup_hooks() {
+		add_action( 'init', array( $this, 'remove_switch_blog_action' ) );
+	}
+
+	/**
+	 * Removes the `$wpdb` processing that WooCommerce does when `switch_to_blog()`
+	 * fires. In WSUWP's configuration, `switch_to_blog()` can fire hundreds of times
+	 * on a page view and does not expect anything heavy to be attached to it.
+	 *
+	 * We may want to consider relying less on `switch_to_blog()` to build the menu,
+	 * but this will work for the time being.
+	 *
+	 * @since 0.0.1
+	 */
+	public function remove_switch_blog_action() {
+		remove_action( 'switch_blog', array( WooCommerce::instance(), 'wpdb_table_fix' ), 0 );
+	}
 }

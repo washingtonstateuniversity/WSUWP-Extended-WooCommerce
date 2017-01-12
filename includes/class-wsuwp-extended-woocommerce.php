@@ -28,6 +28,10 @@ class WSUWP_Extended_WooCommerce {
 	 * @since 0.0.1
 	 */
 	public function setup_hooks() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+
 		add_action( 'init', array( $this, 'remove_switch_blog_action' ) );
 	}
 

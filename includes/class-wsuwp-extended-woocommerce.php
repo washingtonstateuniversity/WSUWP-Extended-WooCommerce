@@ -44,6 +44,7 @@ class WSUWP_Extended_WooCommerce {
 	 */
 	public function remove_shortcode_ui() {
 		remove_action( 'init', 'shortcode_ui_init', 5 );
+		remove_action( 'init', 'Image_Shortcake::get_instance' );
 	}
 
 	/**

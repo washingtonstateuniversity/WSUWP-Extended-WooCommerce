@@ -31,8 +31,19 @@ class WSUWP_Extended_WooCommerce {
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return;
 		}
-
+		add_filter( 'wsuwp_embeds_enable_facebook_post', '__return_false' );
+		add_action( 'init', array( $this, 'remove_shortcode_ui' ), 3 );
 		add_action( 'init', array( $this, 'remove_switch_blog_action' ) );
+	}
+
+	/**
+	 * Effectively disables the Shortcode UI problem due to a conflict in the Select2
+	 * version used by that plugin and WooCommerce.
+	 *
+	 * @since 0.0.2
+	 */
+	public function remove_shortcode_ui() {
+		remove_action( 'init', 'shortcode_ui_init', 5 );
 	}
 
 	/**

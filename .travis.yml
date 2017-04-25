@@ -12,7 +12,7 @@ cache:
 # Set the default environment.
 env:
   global:
-    - WP_GRUNT=1
+    - WSU_GRUNT=1
 
 notifications:
   email:

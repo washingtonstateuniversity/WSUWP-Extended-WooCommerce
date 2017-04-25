@@ -69,21 +69,21 @@ function override_status_tab() {
 	<table class="wc_status_table widefat" cellspacing="0">
 		<thead>
 		<tr>
-			<th colspan="3" data-export-label="Templates"><h2><?php _e( 'Templates', 'woocommerce' ); ?><?php echo wc_help_tip( __( 'This section shows any files that are overriding the default WooCommerce template pages.', 'woocommerce' ) ); ?></h2></th>
+			<th colspan="3" data-export-label="Templates"><h2><?php esc_html_e( 'Templates', 'woocommerce' ); ?></h2></th>
 		</tr>
 		</thead>
 		<tbody>
 		<?php if ( $theme['has_woocommerce_file'] ) : ?>
 			<tr>
-				<td data-export-label="Archive Template"><?php _e( 'Archive template', 'woocommerce' ); ?>:</td>
+				<td data-export-label="Archive Template"><?php esc_html_e( 'Archive template', 'woocommerce' ); ?>:</td>
 				<td class="help">&nbsp;</td>
-				<td><?php _e( 'Your theme has a woocommerce.php file, you will not be able to override the woocommerce/archive-product.php custom template since woocommerce.php has priority over archive-product.php. This is intended to prevent display issues.', 'woocommerce' ); ?></td>
+				<td><?php esc_html_e( 'Your theme has a woocommerce.php file, you will not be able to override the woocommerce/archive-product.php custom template since woocommerce.php has priority over archive-product.php. This is intended to prevent display issues.', 'woocommerce' ); ?></td>
 			</tr>
 		<?php endif ?>
 		<?php
 		if ( ! empty( $theme['overrides'] ) ) { ?>
 			<tr>
-				<td data-export-label="Overrides"><?php _e( 'Overrides', 'woocommerce' ); ?></td>
+				<td data-export-label="Overrides"><?php esc_html_e( 'Overrides', 'woocommerce' ); ?></td>
 				<td class="help">&nbsp;</td>
 				<td>
 					<?php
@@ -93,10 +93,10 @@ function override_status_tab() {
 						if ( $override['core_version'] && ( empty( $override['version'] ) || version_compare( $override['version'], $override['core_version'], '<' ) ) ) {
 							$current_version = $override['version'] ? $override['version'] : '-';
 							printf(
-								__( '%1$s version %2$s is out of date. The core version is %3$s', 'woocommerce' ),
-								'<code>' . $override['file'] . '</code>',
-								'<strong style="color:red">' . $current_version . '</strong>',
-								$override['core_version']
+								__( '%1$s version %2$s is out of date. The core version is %3$s', 'woocommerce' ), // @codingStandardsIgnoreLine
+								'<code>' . esc_html( $override['file'] ) . '</code>',
+								'<strong style="color:red">' . esc_html( $current_version ) . '</strong>',
+								esc_html( $override['core_version'] )
 							);
 						} else {
 							echo esc_html( $override['file'] );
@@ -115,9 +115,9 @@ function override_status_tab() {
 		if ( true === $theme['has_outdated_templates'] ) {
 			?>
 			<tr>
-				<td data-export-label="Outdated Templates"><?php _e( 'Outdated templates', 'woocommerce' ); ?>:</td>
+				<td data-export-label="Outdated Templates"><?php esc_html_e( 'Outdated templates', 'woocommerce' ); ?>:</td>
 				<td class="help">&nbsp;</td>
-				<td><mark class="error"><span class="dashicons dashicons-warning"></span></mark><a href="https://docs.woocommerce.com/document/fix-outdated-templates-woocommerce/" target="_blank"><?php _e( 'Learn how to update', 'woocommerce' ) ?></a></td>
+				<td><mark class="error"><span class="dashicons dashicons-warning"></span></mark><a href="https://docs.woocommerce.com/document/fix-outdated-templates-woocommerce/" target="_blank"><?php esc_html_e( 'Learn how to update', 'woocommerce' ) ?></a></td>
 			</tr>
 			<?php
 		}

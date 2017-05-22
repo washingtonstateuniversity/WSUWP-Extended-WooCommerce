@@ -25,6 +25,9 @@ function bootstrap() {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		return;
 	}
+
+	include_once __DIR__ . '/includes/sales-tax.php';
+
 	add_filter( 'wsuwp_embeds_enable_facebook_post', '__return_false' );
 	add_action( 'init', '\WSU\WooCommerce_Extended\remove_shortcode_ui', 3 );
 	add_action( 'init', '\WSU\WooCommerce_Extended\remove_switch_blog_action' );

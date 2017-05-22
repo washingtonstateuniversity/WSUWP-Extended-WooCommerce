@@ -33,7 +33,7 @@ function find_tax_rate() {
 
 	$matched_rates = array();
 
-	$tax_url = 'http://dor.wa.gov/AddressRates.aspx?output=text';
+	$tax_url = 'http://dor.wa.gov/AddressRates.aspx';
 	$tax_url = add_query_arg( array(
 		'output' => 'text',
 		'addr' => urlencode( $address ),

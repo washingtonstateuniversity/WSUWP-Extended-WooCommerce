@@ -22,6 +22,10 @@ add_filter( 'woocommerce_rate_label', 'WSU\WooCommerce_Extended\Sales_Tax\rate_l
  * @return array
  */
 function find_tax_rate() {
+	if ( ! WC()->customer ) {
+		return array();
+	}
+
 	$address = WC()->customer->get_shipping_address_1();
 	$state    = WC()->customer->get_shipping_state();
 	$postcode = WC()->customer->get_shipping_postcode();

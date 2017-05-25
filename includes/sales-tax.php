@@ -2,16 +2,18 @@
 
 namespace WSU\WooCommerce_Extended\Sales_Tax;
 
-/**
- * Short circuit database tax table lookup.
- *
- * @since 0.1.0
- */
-add_filter( 'woocommerce_customer_taxable_address', '__return_empty_array', 10 );
-
-add_filter( 'woocommerce_matched_rates', 'WSU\WooCommerce_Extended\Sales_Tax\find_tax_rate' );
+add_filter( 'woocommerce_find_rates', 'WSU\WooCommerce_Extended\Sales_Tax\find_tax_rate' );
 add_filter( 'woocommerce_rate_code', 'WSU\WooCommerce_Extended\Sales_Tax\rate_code', 10, 2 );
 add_filter( 'woocommerce_rate_label', 'WSU\WooCommerce_Extended\Sales_Tax\rate_label', 10, 2 );
+add_filter( 'woocommerce_calc_shipping_tax', 'WSU\WooCommerce_Extended\Sales_Tax\calculate_shipping_tax', 10, 3 );
+
+/**
+ * Show only one tax line item to the customer rather than the same tax rate
+ * multiple times for each product and shipping.
+ *
+ * @since 0.1.1
+ */
+add_filter( 'pre_option_woocommerce_tax_total_display', '__return_zero' );
 
 /**
  * Finds the tax rate for a customer's cart address using the
@@ -99,7 +101,30 @@ function find_tax_rate() {
 	);
 	wp_cache_set( $lookup_key, $code_storage, 'wsuwp_woo_tax', $exp );
 
-	return $matched_rates;
+	return $code_storage['matched_rates'];
+}
+
+/**
+ * Calculates the sales tax on shipping costs.
+ *
+ * @since 0.1.1
+ *
+ * @param $taxes
+ * @param $price
+ * @param $rates
+ *
+ * @return array
+ */
+function calculate_shipping_tax( $taxes, $price, $rates ) {
+	$rate = find_tax_rate();
+
+	if ( empty( $rate ) ) {
+		return array( 'shipping' => 0 );
+	}
+
+	$rate = reset( $rate );
+
+	return array( 'shipping' => $price * ( $rate['rate'] / 100 ) );
 }
 
 /**
@@ -114,6 +139,10 @@ function find_tax_rate() {
  * @return string
  */
 function rate_code( $code_string, $key ) {
+	if ( 'shipping' === $key ) {
+		return 'shipping';
+	}
+
 	$existing = wp_cache_get( $key, 'wsuwp_woo_tax' );
 
 	if ( $existing && isset( $existing['location_code'] ) ) {
@@ -134,6 +163,13 @@ function rate_code( $code_string, $key ) {
  * @return string
  */
 function rate_label( $rate_name, $key ) {
+	if ( 'shipping' === $key ) {
+		$rates = find_tax_rate();
+		foreach( $rates as $key => $rate ) {
+			return $rates[ $key ]['label'] . " (Shipping)";
+		}
+	}
+
 	$existing = wp_cache_get( $key, 'wsuwp_woo_tax' );
 
 	if ( $existing && isset( $existing['matched_rates'] ) ) {

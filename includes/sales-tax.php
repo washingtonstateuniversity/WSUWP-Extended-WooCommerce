@@ -80,6 +80,9 @@ function find_tax_rate() {
 				);
 			}
 		}
+	} else {
+		$logger = new \WC_Logger();
+		$logger->add( 'wsuws-tax', 'Tax lookup failed: ' . $response->get_error_message() . ', ' . $tax_url );
 	}
 
 	$exp = 0;

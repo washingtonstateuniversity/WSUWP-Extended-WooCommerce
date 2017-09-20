@@ -82,11 +82,11 @@ function find_tax_rate() {
 
 	$exp = 0;
 
-	// If no tax rate is found using the API, use a generic 7.8%
+	// If no tax rate is found using the API, use the highest WA state rate - 10.4%.
 	if ( empty( $matched_rates ) ) {
 		$matched_rates[ $lookup_key ] = array(
-			'rate' => 7.8,
-			'label' => '7.8% Sales Tax (est)',
+			'rate' => 10.4,
+			'label' => '10.4% (estimated) Sales Tax',
 			'shipping' => 'yes',
 			'compound' => 'no',
 		);

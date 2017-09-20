@@ -39,7 +39,7 @@ function find_tax_rate() {
 
 	$matched_rates = array();
 
-	$tax_url = 'https://dor.wa.gov/AddressRates.aspx';
+	$tax_url = 'https://webgis.dor.wa.gov/webapi/addressrates.aspx';
 	$tax_url = add_query_arg( array(
 		'output' => 'text',
 		'addr' => urlencode( $address ),
@@ -55,7 +55,9 @@ function find_tax_rate() {
 		return $existing['matched_rates'];
 	}
 
-	$response = wp_remote_get( $tax_url );
+	$response = wp_remote_get( $tax_url, array(
+		'sslverify' => false,
+	) );
 
 	if ( ! is_wp_error( $response ) ) {
 		$result = trim( wp_remote_retrieve_body( $response ) );

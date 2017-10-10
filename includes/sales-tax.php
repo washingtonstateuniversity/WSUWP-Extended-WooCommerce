@@ -6,7 +6,7 @@ add_action( 'init', 'WSU\WooCommerce_Extended\Sales_Tax\register_post_type' );
 add_filter( 'woocommerce_find_rates', 'WSU\WooCommerce_Extended\Sales_Tax\find_tax_rate' );
 add_filter( 'woocommerce_rate_code', 'WSU\WooCommerce_Extended\Sales_Tax\rate_code', 10, 2 );
 add_filter( 'woocommerce_rate_label', 'WSU\WooCommerce_Extended\Sales_Tax\rate_label', 10, 2 );
-add_action( 'woocommerce_saved_order_items', 'WSU\WooCommerce_Extended\Sales_Tax\saved_order_items', 10, 2 );
+add_action( 'woocommerce_saved_order_items', 'WSU\WooCommerce_Extended\Sales_Tax\saved_order_items', 10 );
 
 /**
  * Show only one tax line item to the customer rather than the same tax rate
@@ -326,15 +326,14 @@ function rate_label( $rate_name, $key ) {
 }
 
 /**
- * Remove old tax records whenever an order is re-saved or calculated
- * on the back-end.
+ * Remove old tax records whenever an order is re-calculated via ajax
+ * with the "Recalculate" button on the edit order screen.
  *
  * @since 0.2.0
  *
- * @param int   $order_id
- * @param array $items
+ * @param int $order_id The ID of the order being updated.
  */
-function saved_order_items( $order_id, $items ) {
+function saved_order_items( $order_id ) {
 	if ( ! is_ajax() && is_admin() ) {
 		return;
 	}

@@ -317,6 +317,9 @@ function rate_label() {
  * Remove old tax records whenever an order is re-calculated via ajax
  * with the "Recalculate" button on the edit order screen.
  *
+ * This data is then recalculated for display via WC_Ajax:calc_line_taxes(),
+ * so we do no further processing after deleting the line items.
+ *
  * @since 0.2.0
  *
  * @param int $order_id The ID of the order being updated.

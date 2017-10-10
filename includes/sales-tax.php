@@ -330,7 +330,6 @@ function rate_label( $rate_name, $key ) {
  * on the back-end.
  *
  * @todo Only do this when the tax rate ID is changing
- * @todo On update, re-calculate taxes properly. (re-calc ajax works)
  *
  * @since 0.2.0
  *
@@ -338,6 +337,10 @@ function rate_label( $rate_name, $key ) {
  * @param array $items
  */
 function saved_order_items( $order_id, $items ) {
+	if ( ! is_ajax() && is_admin() ) {
+		return;
+	}
+
 	$order = wc_get_order( $order_id );
 
 	$rate = find_tax_rate( $order_id );

@@ -4,7 +4,7 @@ namespace WSU\WooCommerce_Extended\Sales_Tax;
 
 add_action( 'init', 'WSU\WooCommerce_Extended\Sales_Tax\register_post_type' );
 add_filter( 'woocommerce_find_rates', 'WSU\WooCommerce_Extended\Sales_Tax\find_tax_rate' );
-add_filter( 'woocommerce_rate_code', 'WSU\WooCommerce_Extended\Sales_Tax\rate_code', 10, 2 );
+add_filter( 'woocommerce_rate_code', 'WSU\WooCommerce_Extended\Sales_Tax\rate_code', 10, 0 );
 add_filter( 'woocommerce_rate_label', 'WSU\WooCommerce_Extended\Sales_Tax\rate_label', 10, 0 );
 add_action( 'woocommerce_saved_order_items', 'WSU\WooCommerce_Extended\Sales_Tax\saved_order_items', 10 );
 
@@ -289,16 +289,9 @@ function find_tax_rate( $order_id = 0 ) {
  *
  * @since 0.1.0
  *
- * @param string $code_string
- * @param string $key
- *
  * @return string
  */
-function rate_code( $code_string, $key ) {
-	if ( 'shipping' === $key ) {
-		return 'shipping';
-	}
-
+function rate_code() {
 	return 'US-WA-TAX-1';
 }
 

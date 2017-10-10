@@ -5,7 +5,7 @@ namespace WSU\WooCommerce_Extended\Sales_Tax;
 add_action( 'init', 'WSU\WooCommerce_Extended\Sales_Tax\register_post_type' );
 add_filter( 'woocommerce_find_rates', 'WSU\WooCommerce_Extended\Sales_Tax\find_tax_rate' );
 add_filter( 'woocommerce_rate_code', 'WSU\WooCommerce_Extended\Sales_Tax\rate_code', 10, 2 );
-add_filter( 'woocommerce_rate_label', 'WSU\WooCommerce_Extended\Sales_Tax\rate_label', 10, 2 );
+add_filter( 'woocommerce_rate_label', 'WSU\WooCommerce_Extended\Sales_Tax\rate_label', 10, 0 );
 add_action( 'woocommerce_saved_order_items', 'WSU\WooCommerce_Extended\Sales_Tax\saved_order_items', 10 );
 
 /**
@@ -302,23 +302,13 @@ function rate_code( $code_string, $key ) {
 }
 
 /**
- * Provides the label displayed to the customer for a tax rate.
+ * Provides the label displayed for a tax rate.
  *
  * @since 0.1.0
  *
- * @param string $rate_name
- * @param string $key
- *
  * @return string
  */
-function rate_label( $rate_name, $key ) {
-	if ( 'shipping' === $key ) {
-		$rates = find_tax_rate();
-		foreach ( $rates as $key => $rate ) {
-			return $rates[ $key ]['label'] . ' (Shipping)';
-		}
-	}
-
+function rate_label() {
 	$rate = find_tax_rate();
 	$rate = reset( $rate );
 

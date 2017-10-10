@@ -136,13 +136,14 @@ function get_tax_request_data( $order = 0 ) {
  */
 function store_rate_data( $rate_key, $rate_data = array() ) {
 	$rate = get_page_by_title( $rate_key, OBJECT, get_post_type_slug() );
-	$rate = $rate->ID;
 
 	if ( ! $rate ) {
 		$rate = wp_insert_post( array(
 			'post_type' => get_post_type_slug(),
 			'post_title' => $rate_key,
 		) );
+	} else {
+		$rate = $rate->ID;
 	}
 
 	if ( ! is_wp_error( $rate ) && ! empty( $rate_data ) ) {

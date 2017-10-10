@@ -341,17 +341,6 @@ function saved_order_items( $order_id, $items ) {
 
 	$order = wc_get_order( $order_id );
 
-	$rate = find_tax_rate( $order_id );
-	$rate_id = false;
-
-	foreach ( $rate as $rate_id => $r ) {
-		continue;
-	}
-
-	if ( ! $rate_id ) {
-		return;
-	}
-
 	/* @var \WC_Order_Item $item */
 
 	// Delete all tax line items associated with the order.

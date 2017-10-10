@@ -29,6 +29,7 @@ function bootstrap() {
 	include_once __DIR__ . '/includes/sales-tax.php';
 
 	add_filter( 'wsuwp_embeds_enable_facebook_post', '__return_false' );
+	add_filter( 'woocommerce_enable_admin_help_tab', '__return_false' );
 	add_action( 'init', '\WSU\WooCommerce_Extended\remove_shortcode_ui', 3 );
 	add_action( 'init', '\WSU\WooCommerce_Extended\remove_switch_blog_action' );
 	add_action( 'woocommerce_admin_status_content_status', '\WSU\WooCommerce_Extended\override_status_tab' );

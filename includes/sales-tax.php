@@ -329,8 +329,6 @@ function rate_label( $rate_name, $key ) {
  * Remove old tax records whenever an order is re-saved or calculated
  * on the back-end.
  *
- * @todo Only do this when the tax rate ID is changing
- *
  * @since 0.2.0
  *
  * @param int   $order_id

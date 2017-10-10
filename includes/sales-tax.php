@@ -230,6 +230,7 @@ function find_tax_rate( $order_id = 0 ) {
 		'sslverify' => false,
 	) );
 
+	// Store the rate key as an empty post so a record is available to update.
 	$rate_id = store_rate_data( $request_data['rate_key'] );
 	$matched_rates = array();
 
@@ -272,6 +273,9 @@ function find_tax_rate( $order_id = 0 ) {
 
 		// Estimated tax rates should not live in cache long.
 		$exp = 60;
+
+		// Delete the prepared rate ID. We can't effectively populate it.
+		wp_delete_post( $rate_id );
 	} else {
 
 		// If a tax rate was found, store it persistently before caching it.

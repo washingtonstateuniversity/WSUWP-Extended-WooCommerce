@@ -6,6 +6,7 @@ add_action( 'init', 'WSU\WooCommerce_Extended\Sales_Tax\register_post_type' );
 add_filter( 'woocommerce_find_rates', 'WSU\WooCommerce_Extended\Sales_Tax\find_tax_rate' );
 add_filter( 'woocommerce_rate_code', 'WSU\WooCommerce_Extended\Sales_Tax\rate_code', 10, 2 );
 add_filter( 'woocommerce_rate_label', 'WSU\WooCommerce_Extended\Sales_Tax\rate_label', 10, 2 );
+add_action( 'woocommerce_saved_order_items', 'WSU\WooCommerce_Extended\Sales_Tax\saved_order_items', 10, 2 );
 
 /**
  * Show only one tax line item to the customer rather than the same tax rate
@@ -322,4 +323,50 @@ function rate_label( $rate_name, $key ) {
 	$rate = reset( $rate );
 
 	return $rate['label'];
+}
+
+/**
+ * Remove old tax records whenever an order is re-saved or calculated
+ * on the back-end.
+ *
+ * @todo Only do this when the tax rate ID is changing
+ * @todo On update, re-calculate taxes properly. (re-calc ajax works)
+ *
+ * @since 0.2.0
+ *
+ * @param int   $order_id
+ * @param array $items
+ */
+function saved_order_items( $order_id, $items ) {
+	$order = wc_get_order( $order_id );
+
+	$rate = find_tax_rate( $order_id );
+	$rate_id = false;
+
+	foreach ( $rate as $rate_id => $r ) {
+		continue;
+	}
+
+	if ( ! $rate_id ) {
+		return;
+	}
+
+	/* @var \WC_Order_Item $item */
+
+	// Delete all tax line items associated with the order.
+	foreach ( $order->get_items( array( 'tax' ) ) as $item_id => $item ) {
+		wc_delete_order_item( $item_id );
+	}
+
+	// Delete all tax metadata associated with shipping line items.
+	foreach ( $order->get_items( array( 'shipping' ) ) as $item_id => $item ) {
+		wc_delete_order_item_meta( $item_id, 'taxes' );
+		$item->save_meta_data();
+	}
+
+	// Delete all tax metadata associated with regular line items.
+	foreach ( $order->get_items() as $item_id => $item ) {
+		wc_delete_order_item_meta( $item_id, '_line_tax_data' );
+		$item->save_meta_data();
+	}
 }

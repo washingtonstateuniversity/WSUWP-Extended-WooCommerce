@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WSUWP Extended WooCommerce
-Version: 0.2.0
+Version: 0.2.1
 Description: A WordPress plugin to apply modifications to WooCommerce defaults.
 Author: washingtonstateuniversity, jeremyfelt
 Author URI: https://web.wsu.edu/

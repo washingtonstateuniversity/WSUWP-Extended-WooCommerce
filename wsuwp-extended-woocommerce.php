@@ -30,8 +30,11 @@ function bootstrap() {
 
 	add_filter( 'wsuwp_embeds_enable_facebook_post', '__return_false' );
 	add_filter( 'woocommerce_enable_admin_help_tab', '__return_false' );
+	add_filter( 'pre_option_woocommerce_allow_tracking', '\WSU\WooCommerce_Extended\disable_tracking' );
+
 	add_action( 'init', '\WSU\WooCommerce_Extended\remove_shortcode_ui', 3 );
 	add_action( 'init', '\WSU\WooCommerce_Extended\remove_switch_blog_action' );
+	add_action( 'init', '\WSU\WooCommerce_Extended\remove_admin_ua_tracking', 3 );
 	add_action( 'woocommerce_admin_status_content_status', '\WSU\WooCommerce_Extended\override_status_tab' );
 }
 
@@ -58,6 +61,28 @@ function remove_shortcode_ui() {
  */
 function remove_switch_blog_action() {
 	remove_action( 'switch_blog', array( \WooCommerce::instance(), 'wpdb_table_fix' ), 0 );
+}
+
+/**
+ * Removes the hook in WooCommerce that tracks users agent strings for admins before
+ * sending them upstream to WooCommerce.
+ *
+ * @since 0.2.1
+ */
+function remove_admin_ua_tracking() {
+	remove_action( 'wp_login', 'wc_maybe_store_user_agent', 10 );
+}
+
+/**
+ * Disable the WooCommerce Tracker that tracks information about the WooCommerce installation
+ * and sends it upstream to woocommerce.com.
+ *
+ * @since 0.2.1
+ *
+ * @return string
+ */
+function disable_tracking() {
+	return 'no';
 }
 
 /**

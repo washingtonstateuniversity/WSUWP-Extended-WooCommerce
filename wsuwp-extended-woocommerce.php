@@ -67,7 +67,7 @@ function remove_switch_blog_action() {
  * @since 0.1.0
  */
 function override_status_tab() {
-	$system_status  = new \WC_REST_System_Status_Controller;
+	$system_status  = new \WC_REST_System_Status_Controller();
 	$theme          = $system_status->get_theme_info();
 	?>
 	<table class="wc_status_table widefat" cellspacing="0">
